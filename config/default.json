@@ -1,0 +1,6 @@
+{
+    "web":{
+        "port":80,
+        "secret":"chittychattytalkywalky"
+    }
+}
