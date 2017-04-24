@@ -12,6 +12,5 @@ function getList(callback){
 }
 $(function(){
     function addList(){
-        
     }
 })

@@ -11,7 +11,8 @@ app.use(bodyParser.urlencoded({ extended: true , limit:'1mb'}));
 app.use(express.static(`${process.cwd()}/static`));
 app.set('view engine','ejs');
 app.set('views', process.cwd() + '/views');
+app.use('/auth',require('./auth.js'));
 app.use((req,res)=>{
     res.render('index');
-})
+});
 server.listen(cfg.web.port);
