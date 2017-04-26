@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/tssc67/chatserver-dse.git"
   },
-  "keywords": [
+  "keywords": [ 
     "Chat",
     "Server",
     "Distributed"
