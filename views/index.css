@@ -6,12 +6,25 @@ body,html{
     overflow-y:hidden;
 }
 #inner{
-    height:100%;
+    position:absolute;
+    width:100%;
+    bottom:0;
+    top:3em;
+}
+#usernameInput{
+    height:3em;
+    background:#ddd;
+}
+#usernameTextbox{
+    height:1.5em;
 }
 #list{
-    background: #555;
-    height:100%;
+    border-right: 1px;
+    border-right-style:solid;
+    border-color:#eee;
+    /*background: #555;*/
     padding:0;
+    height:100%;
 }
 #chat{
     height:100%;
@@ -22,11 +35,12 @@ body,html{
     width:100%;
     top:0;
     bottom:3em;
-    background: #666;
 }
 #chatInput{
+    border-top: 1px;
+    border-top-style:solid;
+    border-color:#eee;
     position:absolute;
-    background: #777;
     height:3em;
     width:100%;
     bottom:0;
@@ -36,8 +50,8 @@ body,html{
     resize: none;
     padding:0.37em;
     font-size:1.5em;
-    color:#fff;
-    background:#888;
+    color:#222;
+    background:#fff;
     border:none;
     width:100%;    
     top:0;

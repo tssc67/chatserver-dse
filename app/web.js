@@ -11,9 +11,15 @@ app.use(bodyParser.urlencoded({ extended: true , limit:'1mb'}));
 app.use(express.static(`${process.cwd()}/static`));
 app.set('view engine','ejs');
 app.set('views', process.cwd() + '/views');
-app.use('/auth',require('./auth.js'));
+app.disable('view cache');
 app.use((req,res)=>{
     res.render('index');
+});
+
+wss.on('connection',function(socket){
+    socket.on('message',(msg)=>{
+        msg = JSON.parse(msg);
+    });
 });
 
 exports.start = function(){

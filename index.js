@@ -44,6 +44,7 @@ function initialize(){
     },errState=>{
         console.log("Remote server network is offline");
         console.log(errState);
+        runServer();
         return 'failover';
     })
     .then(state=>{
@@ -90,7 +91,7 @@ function gossipHandler(req,res){
 
 function replicate(){
     return new Promise(function(resolve,reject){
-
+        
     });
 }
 

@@ -1,7 +1,7 @@
 var cfg = require('config');
 var http = require('http');
 http.request({
-    host:"127.0.0.1",
+    host:"127.0.0.1", 
     port:cfg.web.port,
     path:"/auth/create",
     headers:{

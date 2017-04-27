@@ -1,3 +1,9 @@
+var ws;
+function connect(){
+    ws = new WebSocket(`ws://${document.location.host}`)
+    ws.onopen = function(){
+    }
+}
 function getList(callback){
     callback([
         {
@@ -11,6 +17,9 @@ function getList(callback){
     ])
 }
 $(function(){
-    function addList(){
-    }
-})
+    $('#usernameTextbox').on('input',function(){
+        ws.send(JSON.stringify({hello:1}))
+    })
+});
+
+connect();
