@@ -18,7 +18,10 @@ function getList(callback){
 }
 $(function(){
     $('#usernameTextbox').on('input',function(){
-        ws.send(JSON.stringify({hello:1}))
+        ws.send(JSON.stringify({
+            action:'hi',
+            data:$(this).val()
+        }))
     })
 });
 
