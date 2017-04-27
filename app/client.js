@@ -6,6 +6,9 @@ module.exports = function(wss){
         socket.on('message',msg=>{
             handler(socket,JSON.parse(msg));
         })
+        socket.on('close',()=>{
+            if(socket.userID)delete sockets[socket.userID];
+        })
     })
 }
 
@@ -16,12 +19,15 @@ function handler(socket,msg){
 function act(socket,action,data){
     var actions = {
         'hi':function(){
-            data = data.toString();
+            userID = data.toString();
             if(socket.userID){
                 delete sockets[userID]
             }
-            sockets[userID] = data;
-            socket.userID = data;
+            sockets[userID] = userID;
+            socket.userID = userID;
+        },
+        'createGroup':function(){
+
         }
     };
     if(!actions[action])return socket.send('unknown_action');
