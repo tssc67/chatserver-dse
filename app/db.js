@@ -52,14 +52,18 @@ function joinGroup(userID,groupID){
 }
 
 function getUnreadCount(userID,groupID){
-
+    loredis.get(`user:${userID}:lastread:${groupID}`)
+    .then(lastTimestamp=>{
+        lastTimestamp = Number(lastTimestamp || 0);
+        return loredis.zcount(`(${lastTimestamp}`,nano());  
+    });
 }
 
 function readMessages(userID,groupID){
     var timestamp = nano();
     loredis.get(`user:${userID}:lastread:${groupID}`)
     .then(lastTimestamp=>{
-        lastTimestamp = Number(lastTimestamp || 0)
+        lastTimestamp = Number(lastTimestamp || 0);
         return distribute('set')(`user:${userID}:lastread:${groupID}`,timestamp)
         .then(()=>loredis.get(`group:${groupID}:messages`,lastTimestamp));
     })
