@@ -15,12 +15,8 @@ app.disable('view cache');
 app.use((req,res)=>{
     res.render('index');
 });
+require('./client.js')(wss);
 
-wss.on('connection',function(socket){
-    socket.on('message',(msg)=>{
-        msg = JSON.parse(msg);
-    });
-});
 
 exports.start = function(){
     server.listen(cfg.web.port);
