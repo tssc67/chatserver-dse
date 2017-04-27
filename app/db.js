@@ -18,7 +18,7 @@ function nano(){
     return ((sec,nano)=>sec*1000000000+nano)(...(process.hrtime()));
 }
 
-function createGroup(groupID){
+exports.createGroup = function(groupID){
     groupExist(groupID)
     .then(exist=>{
         if(exist) 
@@ -29,7 +29,7 @@ function createGroup(groupID){
     })
 }
 
-function groupExist(groupID){
+exports.groupExist = function(groupID){
     loredis.get(`group:${groupID}`)
     .then(creationDate=>{
         return creationDate?true:false;
@@ -37,7 +37,7 @@ function groupExist(groupID){
 }
 
 
-function joinGroup(userID,groupID){
+exports.joinGroup = function(userID,groupID){
     groupExist(groupID)
     .then(exist=>{
         if(exist){
@@ -51,7 +51,7 @@ function joinGroup(userID,groupID){
     })
 }
 
-function getUnreadCount(userID,groupID){
+exports.getUnreadCount = function(userID,groupID){
     loredis.get(`user:${userID}:lastread:${groupID}`)
     .then(lastTimestamp=>{
         lastTimestamp = Number(lastTimestamp || 0);
@@ -59,7 +59,7 @@ function getUnreadCount(userID,groupID){
     });
 }
 
-function readMessages(userID,groupID){
+exports.readMessages = function(userID,groupID){
     var timestamp = nano();
     loredis.get(`user:${userID}:lastread:${groupID}`)
     .then(lastTimestamp=>{
@@ -69,7 +69,7 @@ function readMessages(userID,groupID){
     })
 }
 
-function sendMessage(userID,groupID,message){
+exports.sendMessage = function(userID,groupID,message){
     var timestamp = nano();
     groupExists(groupID)
     .then(exist=>{
