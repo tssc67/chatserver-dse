@@ -46,7 +46,7 @@ function initialize(){
         console.log(errState);
         runServer();
         return 'failover';
-    })
+    }) 
     .then(state=>{
         failoverState = state;
     })

@@ -3,14 +3,15 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 var loredis = redis.createClient();
-var reredis = redis.createClient({
-    host:cfg.remote[0]
-});
+// var reredis = redis.createClient({
+//     host:cfg.remote[0]
+// });
 function distribute(func){
     return (...args)=>
     Promise.all([
-        loredis[func](...args),
-        reredis[func](...args)
+        loredis[func](...args)
+        // ,
+        // reredis[func](...args)
     ])
 }
 
@@ -19,18 +20,18 @@ function nano(){
 }
 
 exports.createGroup = function(groupID){
-    groupExist(groupID)
+    return groupExist(groupID)
     .then(exist=>{
         if(exist) 
             throw new Error("group_exist")
         else{
-            return distribute('set')(`group:${groupID}`,nano());
+            return distribute('setAsync')(`group:${groupID}`,nano());
         }
     })
 }
 
-exports.groupExist = function(groupID){
-    loredis.get(`group:${groupID}`)
+function groupExist(groupID){
+    return loredis.getAsync(`group:${groupID}`)
     .then(creationDate=>{
         return creationDate?true:false;
     })
@@ -38,12 +39,12 @@ exports.groupExist = function(groupID){
 
 
 exports.joinGroup = function(userID,groupID){
-    groupExist(groupID)
+    return groupExist(groupID)
     .then(exist=>{
         if(exist){
             return Promise.all([
-                distribute('sadd')(`group:${groupID}:members`,userID),
-                distribute('zadd')(`user:${userID}`,nano(),groupID)
+                distribute('saddAsync')(`group:${groupID}:members`,userID),
+                distribute('zaddAsync')(`user:${userID}`,nano(),groupID)
             ]);
         }   
         else
@@ -52,29 +53,29 @@ exports.joinGroup = function(userID,groupID){
 }
 
 exports.getUnreadCount = function(userID,groupID){
-    loredis.get(`user:${userID}:lastread:${groupID}`)
+    return loredis.getAsync(`user:${userID}:lastread:${groupID}`)
     .then(lastTimestamp=>{
         lastTimestamp = Number(lastTimestamp || 0);
-        return loredis.zcount(`(${lastTimestamp}`,nano());  
+        return loredis.zcountAsync(`(${lastTimestamp}`,nano());  
     });
 }
 
 exports.readMessages = function(userID,groupID){
     var timestamp = nano();
-    loredis.get(`user:${userID}:lastread:${groupID}`)
+    return loredis.getAsync(`user:${userID}:lastread:${groupID}`)
     .then(lastTimestamp=>{
         lastTimestamp = Number(lastTimestamp || 0);
-        return distribute('set')(`user:${userID}:lastread:${groupID}`,timestamp)
+        return distribute('setAsync')(`user:${userID}:lastread:${groupID}`,timestamp)
         .then(()=>loredis.get(`group:${groupID}:messages`,lastTimestamp));
     })
 }
 
 exports.sendMessage = function(userID,groupID,message){
     var timestamp = nano();
-    groupExists(groupID)
+    return groupExist(groupID)
     .then(exist=>{
         if(exist){
-            return distribute('zadd')
+            return distribute('zaddAsync')
             (`group:${groupID}:messages`,timestamp,JSON.stringify({
                 username,
                 timestamp,

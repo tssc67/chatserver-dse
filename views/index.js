@@ -4,24 +4,21 @@ function connect(){
     ws.onopen = function(){
     }
 }
-function getList(callback){
-    callback([
-        {
-          profile:"img/a.jpg",
-          name:"The Last Group"
-        },
-        {
-          profile:"img/b.jpg",
-          name:"Node.js"
-        }
-    ])
+function sendAction(action,data){
+    ws.send(JSON.stringify({
+        action,
+        data
+    }))
+}
+function listGroup(){
+    sendAction('listGroup');
+}
+function createGroup(groupID){
+    sendAction('createGroup',groupID);
 }
 $(function(){
     $('#usernameTextbox').on('input',function(){
-        ws.send(JSON.stringify({
-            action:'hi',
-            data:$(this).val()
-        }))
+        sendAction('hi',$(this).val());
     })
 });
 
