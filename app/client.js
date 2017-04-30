@@ -64,6 +64,9 @@ function act(socket,action,data){
                 return socket.send('err');
             });
         },
+        'message':function(){
+            // NOT YET IMPLEMENT
+        }
     };
     if(!actions[action])return socket.send('unknown_action');
     if(action!='hi' && !socket.userID)return socket.send('unknown_userid');

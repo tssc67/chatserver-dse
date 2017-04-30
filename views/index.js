@@ -16,6 +16,15 @@ function listGroup(){
 function createGroup(groupID){
     sendAction('createGroup',groupID);
 }
+function joinGroup(){
+
+}
+function deleteGroup(){
+    
+}
+function sendMessage(){
+
+}
 $(function(){
     $('#usernameTextbox').on('input',function(){
         sendAction('hi',$(this).val());

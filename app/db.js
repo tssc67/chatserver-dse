@@ -3,20 +3,37 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 var loredis = redis.createClient();
-// var reredis = redis.createClient({
-//     host:cfg.remote[0]
-// });
+var reredis = redis.createClient({
+    host:cfg.remote[0]
+});
+var failover = false;
+reredis.on('error',err=>{
+    failover = true;
+    //Remote fail
+})
+
 function distribute(func){
     return (...args)=>
     Promise.all([
-        loredis[func](...args)
-        // ,
-        // reredis[func](...args)
+        loredis[func](...args),
+        failover ? undefined : reredis[func](...args)
     ])
 }
 
 function nano(){
     return ((sec,nano)=>sec*1000000000+nano)(...(process.hrtime()));
+}
+
+
+function groupExist(groupID){
+    return loredis.getAsync(`group:${groupID}`)
+    .then(creationDate=>{
+        return creationDate?true:false;
+    })
+}
+
+exports.listGroup = function(userID){
+    return loredis.zrangeAsync(`user:${userID}`,0,nano());
 }
 
 exports.createGroup = function(groupID){
@@ -30,13 +47,13 @@ exports.createGroup = function(groupID){
     })
 }
 
-function groupExist(groupID){
-    return loredis.getAsync(`group:${groupID}`)
-    .then(creationDate=>{
-        return creationDate?true:false;
-    })
+exports.deleteGroup = function(groupID){
+    return Promise.all([
+        distribute('delAsync')(`group:${groupID}`),
+        distribute('delAsync')(`group:${groupID}:members`),
+        distribute('delAsync')(`group:${groupID}:messages`)
+    ]);
 }
-
 
 exports.joinGroup = function(userID,groupID){
     return groupExist(groupID)
