@@ -97,24 +97,8 @@ function replicate(){
 
 function getRemoteFailoverState(idx){
     return gossip(0,"");
-    // return new Promise(function(resolve,reject){
-    //     var req = 
-    //     http.request({
-    //         host:cfg.remote[idx],
-    //         port:cfg.gossip.port,
-    //         headers:{
-    //             password:cfg.gossip.password
-    //         }
-    //     },function(res){
-    //         res.on('data',data=>
-    //             resolve(data.toString())
-    //         );
-    //     });
-    //     req.on('error',(err)=>{reject('offline')})
-    //     req.end();
-    // });
 }
-
+ 
 function gossip(idx,msg){
     console.log(`Sending message : ${msg}`)
     return new Promise(function(resolve,reject){

@@ -1,3 +1,4 @@
+<%- include('usernameRandomizer.js') %>
 var ws;
 function connect(){
     ws = new WebSocket(`ws://${document.location.host}`)
@@ -17,7 +18,7 @@ function createGroup(groupID){
     sendAction('createGroup',groupID);
 }
 function joinGroup(){
-
+    sendAction('joinGroup',groupID);
 }
 function deleteGroup(){
     
