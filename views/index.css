@@ -9,15 +9,12 @@ body,html{
     position:absolute;
     width:100%;
     bottom:0;
-    top:3em;
+    top:0em;
 }
 #usernameInput{
-    height:3em;
     background:#ddd;
 }
-#usernameTextbox{
-    height:1.5em;
-}
+
 #list{
     border-right: 1px;
     border-right-style:solid;

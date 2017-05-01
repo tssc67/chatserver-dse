@@ -49,7 +49,7 @@ function initialize(){
     }) 
     .then(state=>{
         failoverState = state;
-    })
+    }).catch(console.log);
 }
 
 function runServer(){

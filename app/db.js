@@ -33,7 +33,7 @@ function groupExist(groupID){
 }
 
 exports.listGroup = function(userID){
-    return loredis.zrangeAsync(`user:${userID}`,0,nano());
+    return loredis.zrangeAsync(`user:${userID}`,-1,-1);
 }
 
 exports.createGroup = function(groupID){
@@ -73,7 +73,7 @@ exports.getUnreadCount = function(userID,groupID){
     return loredis.getAsync(`user:${userID}:lastread:${groupID}`)
     .then(lastTimestamp=>{
         lastTimestamp = Number(lastTimestamp || 0);
-        return loredis.zcountAsync(`(${lastTimestamp}`,nano());  
+        return loredis.zcountAsync(`group:${groupID}:messages`,`(${lastTimestamp}`,nano());  
     });
 }
 
@@ -91,15 +91,18 @@ exports.sendMessage = function(userID,groupID,message){
     var timestamp = nano();
     return groupExist(groupID)
     .then(exist=>{
-        if(exist){
-            return distribute('zaddAsync')
+        if(!exist){
+            throw new Error("group_not_exist");
+        }
+        return loredis.sismemberAsync(`group:${groupID}:members`,userID)
+    })
+    .then(ismember=>{
+        if(!ismember)throw new Error("user_is_not_member")
+        return distribute('zaddAsync')
             (`group:${groupID}:messages`,timestamp,JSON.stringify({
-                username,
+                userID,
                 timestamp,
                 message
-            }))
-        }
-        else
-            throw new Error("group_not_exist");
+            }));
     })
 }

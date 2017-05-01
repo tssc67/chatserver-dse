@@ -3,6 +3,7 @@
 <head>
     <title></title>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 </head>
 <body>
     <style>
@@ -10,16 +11,35 @@
         <%- include('index.css') %>
     </style>
     <div class="container-fluid" id="wrapper">
-        <div class="row" id="usernameInput">
-            <div style="padding:0.6em">
-                Username : <input type="text" id="usernameTextbox"></input> No authentication need You are who you are
-            </div>
-        </div>
+
         <div class="row" id="inner">
             <div id="list" class="col col-sm-3">
+                <div class="container-fluid">
+                    <div class="row" id="usernameInput">
+                        <div class="col col-sm-12" style="padding:0.5em">
+                            <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">@</span>
+                            <input type="text" class="form-control" placeholder="Username" id="usernameTextbox" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="groupInput">
+                        <div class="input-group">
+                        <input type="text" placeholder="GroupName" class="form-control" aria-label="...">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="#">Create</a></li>
+                            <li><a href="#">Join</a></li>
+                            </ul>
+                        </div><!-- /btn-group -->
+                        </div><!-- /input-group -->
+                    </div>
+                </div>
             </div>
             <div id="chat" class="col col-sm-9">
                 <div id="chatDisplay">
+
                 </div>
                 <div id="chatInput">
                     <textarea name="" id="chatInputArea" cols="30" rows="10"></textarea>
