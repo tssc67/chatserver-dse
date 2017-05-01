@@ -100,7 +100,6 @@ function gossipHandler(req,res){
             break;
         case 'run':
             failoverState = 'running';
-            if(fail)
             runServer();
             break;
         case 'replication_request':
