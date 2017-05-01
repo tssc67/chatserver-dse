@@ -9,6 +9,7 @@ var reredis = redis.createClient({
 var failover = false;
 reredis.on('error',err=>{
     failover = true;
+    process.send('failover');
     //Remote fail
 })
 
