@@ -4,7 +4,6 @@ var unreadEleList = {};
 var currentGroup;
 function viewUpdateGroupList(groupList){
     groupListEle.empty();
-    currentGroup = null;
     groupList.forEach((groupObj)=>{
         var groupEle = $(`<div class="group"></div>`);
         var unreadEle = $(`<span class="label label-primary">${groupObj.unreadCount}</span>`)
