@@ -139,12 +139,14 @@ function replicate(){
 
 function healthcheck(){
     var req = http.request(`http://${cfg.remote[0]}:9090`,res=>{
-        res.on('error',err=>{}
+        res.on('error',err=>{
+            console.log("Entering failover state");
             failoverState = 'failover';
-        )
+        })
     });
     req.end();
     req.on('error',err=>{
+        console.log("Entering failover state");
         failoverState = 'failover';
     })
 }
