@@ -39,8 +39,9 @@ function act(socket,action,data){
         },
         'createGroup':function(){
             if(typeof data != 'string') return response('error');;
+            if(data.length == 0)return response('error');
             db.createGroup(data).then(()=>{
-                return response('ok');
+                return response('ok',data);
             })
             .then(()=>{
                 return db.joinGroup(socket.userID,data);
@@ -56,6 +57,7 @@ function act(socket,action,data){
             });
         },
         'joinGroup':function(){
+            if(data.length == 0)return response('error');
             db.joinGroup(socket.userID,data)
             .then(()=>{
                 return response('ok');

@@ -31,6 +31,12 @@ function handler(res){
         case 'readMessages':
             viewUpdateChatDisplay(res.data);
             break;
+        case 'createGroup':
+            if(res.message == 'ok')listGroup();
+            break;
+        case 'joinGroup':
+            if(res.message == 'ok')listGroup();
+            break;
     }
 }
 function sendAction(action,data){
@@ -45,7 +51,7 @@ function listGroup(){
 function createGroup(groupID){
     sendAction('createGroup',groupID);
 }
-function joinGroup(){
+function joinGroup(groupID){
     sendAction('joinGroup',groupID);
 }
 function deleteGroup(){
@@ -57,14 +63,34 @@ function sendMessage(groupID,message){
 function readMessages(groupID){
     sendAction('readMessages',{groupID});
 }
+
+function createGroupBtn(){
+    if(groupEle.val().length != 0)createGroup(groupEle.val());
+}
+
+function joinGroupBtn(){
+    if(groupEle.val().length != 0)joinGroup(groupEle.val());
+}
+
 function updateUsername(){
     sendAction('hi',usernameEle.val());
 }
 var usernameEle = $('#username-textbox');;
+var groupEle = $('#group-textbox');
 $(function(){
     $('#username-textbox').on('input',function(){
         updateUsername();
     })
+    $('#chat-input-area').on("keypress",function(e){
+        if(e.which == 13){
+            if(currentGroup)sendMessage(currentGroup,$(this).val());
+            $(this).val('');
+        }
+    });
+    $('#chat-input-area').on("keyup",function(e){
+        if(e.which == 13){
+        }
+    });
 });
 
 connect();

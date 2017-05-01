@@ -4,6 +4,7 @@ var unreadEleList = {};
 var currentGroup;
 function viewUpdateGroupList(groupList){
     groupListEle.empty();
+    currentGroup = null;
     groupList.forEach((groupObj)=>{
         var groupEle = $(`<div class="group"></div>`);
         var unreadEle = $(`<span class="label label-primary">${groupObj.unreadCount}</span>`)
@@ -19,11 +20,13 @@ function viewUpdateGroupList(groupList){
     });
 }
 function viewUpdateGroupUnreadCount(noti){
-    unreadEleList[noti.groupID].text(noti.unreadCount);
+    if(noti.groupID == currentGroup)readMessages(noti.groupID);
+    else unreadEleList[noti.groupID].text(noti.unreadCount);
 }
 function viewUpdateChatDisplay(messages){
     currentGroup = messages.groupID;
     chatDisplayEle.empty();
+    unreadEleList[currentGroup].text(0);
     messages.messages.forEach(function(message){
         message = JSON.parse(message);
         var time = new Date(message.timestamp);
