@@ -101,6 +101,7 @@ function gossipHandler(req,res){
         case 'start':
             initialize();
             break;
+        case 'replication_success':
         case 'run':
             failoverState = 'running';
             runServer();
@@ -108,9 +109,6 @@ function gossipHandler(req,res){
         case 'replication_request':
             failoverState = 'sourcing';
             replicate();
-            break;
-        case 'replication_success':
-            failoverState = 'running';
             break;
     }
     res.end(failoverState);
