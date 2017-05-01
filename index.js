@@ -15,6 +15,7 @@ if(cluster.isMaster){
     var healthcheckServer = http.createServer(healthcheckHandler);
     gossipServer.listen(cfg.gossip.port);
     healthcheckServer.listen(cfg.healthcheck.port)
+    setInterval(healthcheck,1000);
 }  
 
 else{
@@ -82,6 +83,7 @@ function forkCluster(){
     })
 }
 
+
 function healthcheckHandler(req,res){
     res.end("OK");
 }
@@ -133,6 +135,18 @@ function replicate(){
             });
         })
     });
+}
+
+function healthcheck(){
+    var req = http.request(`http://${cfg.remote[0]}:9090`,res=>{
+        res.on('error',err=>{}
+            failoverState = 'failover';
+        )
+    });
+    req.end();
+    req.on('error',err=>{
+        failoverState = 'failover';
+    })
 }
 
 function getRemoteFailoverState(idx){
