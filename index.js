@@ -103,6 +103,9 @@ function gossipHandler(req,res){
             failoverState = 'sourcing';
             replicate();
             break;
+        case 'replication_success':
+            failoverState = 'running';
+            break;
     }
     res.end(failoverState);
 }
@@ -119,6 +122,12 @@ function replicate(){
         .then(()=>loredis.keysAsync('*'))
         .then(keys=>{
             return loredis.migrateAsync(cfg.remote[0],6379,"",0,5000,'COPY','KEYS',...keys);
+        })
+        .then(()=>{
+            gossip(0,"replication_success")
+            .then(()=>{
+                failoverState = 'running';
+            });
         })
     });
 }
