@@ -4,7 +4,6 @@ var ws;
 function connect(){
     ws = new WebSocket(`ws://${document.location.host}`)
     ws.onopen = function(){
-        usernameEle.val(randomUsername());
         updateUsername();
     }
     ws.onmessage = function(evt){
