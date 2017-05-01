@@ -1,6 +1,6 @@
 {
     "web":{
-        "port":80,
+        "port":8000,
         "secret":"chittychattytalkywalky"
     },
     "gossip":{
