@@ -1,12 +1,15 @@
 <%- include('usernameRandomizer.js') %>
+<%- include('view.js') %>
 var ws;
 function connect(){
     ws = new WebSocket(`ws://${document.location.host}`)
     ws.onopen = function(){
+        usernameEle.val(randomUsername());
+        updateUsername();
     }
     ws.onmessage = function(evt){
         console.log(evt.data);
-        // handler(JSON.parse(evt.data));
+        handler(JSON.parse(evt.data));
     }
     ws.onclose = function(evt){
         connect();
@@ -18,7 +21,9 @@ function handler(res){
             if(res.message=='ok')listGroup();
             break;
         case 'listGroup':
-            if(res.message=='ok')console.log(res.data);
+            if(res.message=='ok'){
+                viewUpdateGroupList(res.data);
+            }
             break;
     }
 }
@@ -43,6 +48,9 @@ function deleteGroup(){
 function sendMessage(groupID,message){
     sendAction('sendMessage',{groupID,message})
 }
+function readMessages(groupID){
+    sendAction('readMessages',{groupID});
+}
 var usernameEle = $('#usernameTextbox');
 function updateUsername(){
     sendAction('hi',usernameEle.val());
@@ -51,8 +59,6 @@ $(function(){
     $('#usernameTextbox').on('input',function(){
         updateUsername();
     })
-    usernameEle.val(randomUsername());
-    updateUsername();
 });
 
 connect();

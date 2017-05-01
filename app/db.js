@@ -83,7 +83,7 @@ exports.readMessages = function(userID,groupID){
     .then(lastTimestamp=>{
         lastTimestamp = Number(lastTimestamp || 0);
         return distribute('setAsync')(`user:${userID}:lastread:${groupID}`,timestamp)
-        .then(()=>loredis.get(`group:${groupID}:messages`,lastTimestamp));
+        .then(()=>loredis.zrangeAsync(`group:${groupID}:messages`,lastTimestamp,timestamp));
     })
 }
 

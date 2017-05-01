@@ -80,12 +80,11 @@ function act(socket,action,data){
                 )
             })
             .then(unreadCountList=>{
-                console.log(unreadCountList);
-                return response("ok",JSON.stringify(
+                return response("ok",
                     unreadCountList.map((unreadCount,idx)=>{
                         return {groupID:list[idx],unreadCount}
                     })
-                ))
+                )
             })
             .catch(err=>{
                 console.log(err);
@@ -108,6 +107,14 @@ function act(socket,action,data){
                         return response('error');
                 }
             });
+        },
+        'readMessages':function(){
+            db.readMessages(socket.userID,data.groupID)
+            .then(console.log)
+            .catch(err=>{
+                console.log(err);   
+                return response('error');
+            })
         }
     };
     if(!actions[action])return response('unknown_action')

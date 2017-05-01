@@ -15,13 +15,20 @@ body,html{
     background:#ddd;
 }
 
-#list{
+#list-container{
     border-right: 1px;
     border-right-style:solid;
     border-color:#eee;
     /*background: #555;*/
     padding:0;
     height:100%;
+}
+.group{
+    padding:0.5em;
+}
+.group:hover{
+    padding:0.5em;
+    background:#eee;
 }
 #chat{
     height:100%;
