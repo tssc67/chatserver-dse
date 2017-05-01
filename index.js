@@ -30,6 +30,7 @@ else{
 
 function initialize(){
     console.log("Initializing Server");
+    if(failoverState=='offline')
     failoverState = 'initial';
     getRemoteFailoverState(0)
     .then(state=>{
@@ -39,6 +40,10 @@ function initialize(){
                 runServer();
                 return gossip(0,'run');
             case 'offline':
+                if(failoverState=='failover'){
+                    return gossip(0,'start')
+                    .then(()=>"failover");
+                }
                 return gossip(0,'start');
             case 'failover':
                 return gossip(0,'replication_request')

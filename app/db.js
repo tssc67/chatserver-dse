@@ -100,7 +100,6 @@ exports.readMessages = function(userID,groupID){
     })
     .then(()=>loredis.zrangeAsync(`group:${groupID}:messages`,0,-1))
     .then(messages=>{
-        console.log(lastTimestamp);
         return {
             groupID,
             messages,
