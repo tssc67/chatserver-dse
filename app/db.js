@@ -132,7 +132,3 @@ exports.sendMessage = function(userID,groupID,message){
 exports.listUser = function(groupID){
     return loredis.smembersAsync(`group:${groupID}:members`);
 }
-
-exporsts.leaveGroup = function(userID,groupID){
-    
-}
