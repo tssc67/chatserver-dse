@@ -115,7 +115,8 @@ function replicate(){
         var reredis = redis.createClient({
             host:cfg.remote[0]
         });
-        loredis.keysAsync('*')
+        reredis.flushdbAsync()
+        .then(()=>loredis.keysAsync('*'))
         .then(keys=>{
             return loredis.migrateAsync(cfg.remote[0],6379,"",0,5000,'COPY','KEYS',...keys);
         })
