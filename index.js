@@ -1,6 +1,7 @@
 var http = require('http');
 global.cfg = require('config');
 global.failoverState = 'offline';
+const bluebird = require('bluebird');
 const redis = require("redis");
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
