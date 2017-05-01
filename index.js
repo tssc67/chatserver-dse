@@ -1,6 +1,7 @@
 var http = require('http');
 global.cfg = require('config');
 global.failoverState = 'offline';
+const redis = require("redis");
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 var workers=[];
@@ -64,6 +65,10 @@ function forkCluster(){
     cluster.on('exit',(worker,code,signal)=>{
         console. log(`worker ${worker.process.pid} died`);
     });
+    cluster.on('message',(worker,msg)=>{
+        if(msg == 'failover')
+            failoverState = 'failover';
+    })
 }
 
 function gossipHandler(req,res){
@@ -84,6 +89,7 @@ function gossipHandler(req,res){
             break;
         case 'replication_request':
             failoverState = 'sourcing';
+            replicate();
             break;
     }
     res.end(failoverState);
@@ -91,7 +97,9 @@ function gossipHandler(req,res){
 
 function replicate(){
     return new Promise(function(resolve,reject){
-        
+        var reredis = redis.createClient({
+            host:cfg.remote[0]
+        });
     });
 }
 
