@@ -108,7 +108,9 @@ function gossipHandler(req,res){
 
 function replicate(){
     return new Promise(function(resolve,reject){
-        var loredis = redis.createClient();
+        bluebird.promisifyAll(redis.RedisClient.prototype);
+        bluebird.promisifyAll(redis.Multi.prototype);
+        var loredis = redis.createClient(); 
         var reredis = redis.createClient({
             host:cfg.remote[0]
         });
