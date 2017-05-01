@@ -119,7 +119,15 @@ function act(socket,action,data){
                 return response('error');
             })
         },
-
+        'leaveGroup':function(){
+            db.leaveGroup(socket.userID,data)
+            .then(()=>{
+                return response('ok');
+            },(err)=>{
+                console.log(err)
+                response('error');
+            });
+        },
         'readAllMessages':function(){
             db.getMessages()
         }

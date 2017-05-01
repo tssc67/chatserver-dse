@@ -31,9 +31,8 @@ function handler(res){
             viewUpdateChatDisplay(res.data);
             break;
         case 'createGroup':
-            if(res.message == 'ok')listGroup();
-            break;
         case 'joinGroup':
+        case 'leaveGroup':
             if(res.message == 'ok')listGroup();
             break;
     }
@@ -53,8 +52,8 @@ function createGroup(groupID){
 function joinGroup(groupID){
     sendAction('joinGroup',groupID);
 }
-function deleteGroup(){
-    
+function leaveGroup(groupID){
+    sendAction('leaveGroup',groupID);
 }
 function sendMessage(groupID,message){
     sendAction('sendMessage',{groupID,message})
@@ -69,6 +68,10 @@ function createGroupBtn(){
 
 function joinGroupBtn(){
     if(groupEle.val().length != 0)joinGroup(groupEle.val());
+}
+
+function leaveGroupBtn(){
+    if(groupEle.val().length != 0)leaveGroup(groupEle.val());
 }
 
 function updateUsername(){
