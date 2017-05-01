@@ -68,7 +68,7 @@ function forkCluster(){
         console. log(`worker ${worker.process.pid} died`);
     });
     cluster.on('message',(worker,msg)=>{
-        if(msg == 'failover')
+        if(msg == 'failover' && failoverState != 'sourcing')
             failoverState = 'failover';
     })
 }
@@ -103,9 +103,14 @@ function gossipHandler(req,res){
 
 function replicate(){
     return new Promise(function(resolve,reject){
+        var loredis = redis.createClient();
         var reredis = redis.createClient({
             host:cfg.remote[0]
         });
+        loredis.keysAsync('*')
+        .then(keys=>{
+            return loredis.migrateAsync(cfg.remote[0],6379,"",0,5000,'COPY','KEYS',...keys);
+        })
     });
 }
 
