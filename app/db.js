@@ -132,3 +132,10 @@ exports.sendMessage = function(userID,groupID,message){
 exports.listUser = function(groupID){
     return loredis.smembersAsync(`group:${groupID}:members`);
 }
+
+exports.leaveGroup = function(userID,groupID){
+    return Promise.all([
+        distribute('sremAsync')(`group:${groupID}:members`,userID),
+        distribute('zremAsync')(`user:${userID}`,ts(),groupID)
+    ]);
+}
