@@ -47,6 +47,7 @@ function initialize(){
                     .then(()=>"failover");
                 }
                 return gossip(0,'start');
+            case 'running':
             case 'failover':
                 return gossip(0,'replication_request')
                 .then(()=>"replicating")
