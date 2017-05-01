@@ -33,7 +33,7 @@ function act(socket,action,data){
             if(socket.userID){
                 delete sockets[userID]
             }
-            sockets[userID] = userID;
+            sockets[userID] = socket;
             socket.userID = userID;
             return response('ok');
         },
@@ -58,7 +58,7 @@ function act(socket,action,data){
         'joinGroup':function(){
             db.joinGroup(socket.userID,data)
             .then(()=>{
-                socket.send('ok');
+                return response('ok');
             },(err)=>{
                 switch(err){
                     case 'group_not_exist':
@@ -94,6 +94,7 @@ function act(socket,action,data){
         'sendMessage':function(){
             db.sendMessage(socket.userID,data.groupID,data.message)
             .then(()=>{
+                notifyMessage(data.groupID);
                 response('ok');
             })
             .catch((err)=>{
@@ -110,14 +111,38 @@ function act(socket,action,data){
         },
         'readMessages':function(){
             db.readMessages(socket.userID,data.groupID)
-            .then(console.log)
+            .then((res)=>response('ok',res))
             .catch(err=>{
                 console.log(err);   
                 return response('error');
             })
+        },
+
+        'readAllMessages':function(){
+            db.getMessages()
         }
     };
     if(!actions[action])return response('unknown_action')
     if(action!='hi' && !socket.userID)return response('unbind_userid')
     actions[action]();
+}
+
+function notifyMessage(groupID){
+    function sendNotification(userID){
+        db.getUnreadCount(userID,groupID)
+        .then(unreadCount=>{
+            sockets[userID].send(JSON.stringify(
+                {action:'notifyMessage',data:{
+                    groupID,
+                    unreadCount
+                }}
+            ))
+        })
+    }
+    return db.listUser(groupID)
+    .then(userList=>{
+        userList.forEach(userID=>{
+            if(sockets[userID])sendNotification(userID);
+        })
+    });
 }

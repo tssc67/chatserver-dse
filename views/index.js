@@ -25,6 +25,12 @@ function handler(res){
                 viewUpdateGroupList(res.data);
             }
             break;
+        case 'notifyMessage':
+            viewUpdateGroupUnreadCount(res.data);
+            break;
+        case 'readMessages':
+            viewUpdateChatDisplay(res.data);
+            break;
     }
 }
 function sendAction(action,data){
@@ -51,12 +57,12 @@ function sendMessage(groupID,message){
 function readMessages(groupID){
     sendAction('readMessages',{groupID});
 }
-var usernameEle = $('#usernameTextbox');
 function updateUsername(){
     sendAction('hi',usernameEle.val());
 }
+var usernameEle = $('#username-textbox');;
 $(function(){
-    $('#usernameTextbox').on('input',function(){
+    $('#username-textbox').on('input',function(){
         updateUsername();
     })
 });

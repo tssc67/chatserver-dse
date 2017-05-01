@@ -11,7 +11,7 @@ body,html{
     bottom:0;
     top:0em;
 }
-#usernameInput{
+#username-input{
     background:#ddd;
 }
 
@@ -34,13 +34,14 @@ body,html{
     height:100%;
     padding:0;
 }
-#chatDisplay{
+#chat-display{
     position:absolute;
     width:100%;
     top:0;
     bottom:3em;
+    overflow-y:scroll;
 }
-#chatInput{
+#chat-input{
     border-top: 1px;
     border-top-style:solid;
     border-color:#eee;
@@ -49,7 +50,7 @@ body,html{
     width:100%;
     bottom:0;
 }
-#chatInputArea{
+#chat-input-area{
     position:absolute;
     resize: none;
     padding:0.37em;
@@ -61,7 +62,7 @@ body,html{
     top:0;
     bottom:0em;
 }
-#chatInputArea:focus {
+#chat-input-area:focus {
     outline: none !important;
     /*box-shadow: 0 0 10px #719ECE;*/
 }
