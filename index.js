@@ -10,7 +10,9 @@ if(cluster.isMaster){
     console.log(cfg);
     forkCluster();
     var gossipServer = http.createServer(gossipHandler)
+    var healthcheckServer = http.createServer(healthcheckHandler);
     gossipServer.listen(cfg.gossip.port);
+    healthcheckServer.listen(cfg.healthcheck.port)
 }  
 
 else{
@@ -64,6 +66,10 @@ function forkCluster(){
     cluster.on('exit',(worker,code,signal)=>{
         console. log(`worker ${worker.process.pid} died`);
     });
+}
+
+function healthcheckHandler(req,res){
+    res.end("OK");
 }
 
 function gossipHandler(req,res){
