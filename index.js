@@ -15,7 +15,6 @@ if(cluster.isMaster){
     var healthcheckServer = http.createServer(healthcheckHandler);
     gossipServer.listen(cfg.gossip.port);
     healthcheckServer.listen(cfg.healthcheck.port)
-    setInterval(healthcheck,1000);
 }  
 
 else{
@@ -67,6 +66,7 @@ var started = false;
 function runServer(){
     if(started)return;
     started = true;
+    setInterval(healthcheck,1000);
     workers.map(worker => worker.send('start'));
     console.log("Server is running");
 }
